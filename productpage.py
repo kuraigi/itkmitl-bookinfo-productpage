@@ -65,28 +65,28 @@ reviewsHostname = "reviews" if (os.environ.get("REVIEWS_HOSTNAME") is None) else
 flood_factor = 0 if (os.environ.get("FLOOD_FACTOR") is None) else int(os.environ.get("FLOOD_FACTOR"))
 
 details = {
-    # "name": "http://{0}{1}:9080".format(detailsHostname, servicesDomain),
+    # "name": "http://{0}{1}:8081".format(detailsHostname, servicesDomain),
     "name": "{0}".format(detailsHostname),
     "endpoint": "details",
     "children": []
 }
 
 ratings = {
-    # "name": "http://{0}{1}:9080".format(ratingsHostname, servicesDomain),
+    # "name": "http://{0}{1}:8080".format(ratingsHostname, servicesDomain),
     "name": "{0}".format(ratingsHostname),
     "endpoint": "ratings",
     "children": []
 }
 
 reviews = {
-    # "name": "http://{0}{1}:9080".format(reviewsHostname, servicesDomain),
+    # "name": "http://{0}{1}:8082".format(reviewsHostname, servicesDomain),
     "name": "{0}".format(reviewsHostname),
     "endpoint": "reviews",
     "children": [ratings]
 }
 
 productpage = {
-    # "name": "http://{0}{1}:9080".format(detailsHostname, servicesDomain),
+    # "name": "http://{0}{1}:8083".format(detailsHostname, servicesDomain),
     "name": "{0}".format(detailsHostname),
     "endpoint": "details",
     "children": [details, reviews]
