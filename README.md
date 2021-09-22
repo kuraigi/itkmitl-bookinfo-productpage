@@ -24,3 +24,9 @@ docker build -t productpage .
 # Run details service on port 8083
 docker run -d --name productpage -p 8083:8083 --link details:details --link ratings:ratings --link reviews:reviews -e 'REVIEWS_HOSTNAME=http://reviews:8082' -e 'RATINGS_HOSTNAME=http://ratings:8080' -e 'DETAILS_HOSTNAME=http://details:8081' productpage
 ```
+
+## How to run with Docker Compose
+
+```bash
+docker-compose up
+```
