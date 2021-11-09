@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookinfo-dev-productpage
+  namespace: student9-bookinfo-dev
+  labels:
+    app: bookinfo-dev-productpage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookinfo-dev-productpage
+  template:
+    metadata:
+      labels:
+        app: bookinfo-dev-productpage
+    spec:
+      containers:
+        - name: bookinfo-dev-productpage
+          env:
+            - name: REVIEWS_HOSTNAME
+              value: http://bookinfo-dev-reviews:8082
+            - name: RATINGS_HOSTNAME
+              value: http://bookinfo-dev-ratings:8080
+            - name: DETAILS_HOSTNAME
+              value: http://bookinfo-dev-details:8081
+          image: ghcr.io/mrsmithz/itkmitl-bookinfo-productpage:dev
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8083
+              name: web-port
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8083
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8083
+              scheme: HTTP
+      imagePullSecrets:
+        - name: registry-bookinfo
