@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Release.Name}}
+  namespace: {{.Values.productpage.namespace}}
+  labels:
+    app: {{.Release.Name}}
+spec:
+  replicas: {{.Values.productpage.replicas}}
+  selector:
+    matchLabels:
+      app: {{.Release.Name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Release.Name}}
+    spec:
+      containers:
+        - name: {{.Release.Name}}
+          {{- if .Values.extraEnv}}
+          env:
+            {{- range $key, $value := .Values.extraEnv }}
+            - name: {{$key}}
+              value: {{$value | quote}}
+            {{- end}}
+          {{- end}}
+          image: {{.Values.productpage.image}}:{{.Values.productpage.tag}}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{.Values.productpage.port}}
+              name: web-port
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{.Values.productpage.port}}
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{.Values.productpage.port}}
+              scheme: HTTP
+      imagePullSecrets:
+        - name: {{.Values.productpage.imagePullSecrets}}
